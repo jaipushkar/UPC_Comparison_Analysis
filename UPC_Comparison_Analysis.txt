@@ -1,0 +1,9 @@
+SELECT new_asin, new_upc_count, old_upc_count
+FROM (
+    SELECT a.asin AS new_asin, COUNT(distinct a.orig_upc) AS new_upc_count, COUNT(distinct b.orig_upc) AS old_upc_count
+    FROM Backup_AmazonPrimeNow_03_06_2024 AS a
+    JOIN Backup_AmazonPrimeNow_02_28_2024 AS b ON a.zip = b.zip AND a.asin = b.asin 
+	where a.job_number ='7924966' and b.job_number ='7451359'
+    GROUP BY a.asin
+) AS counts
+WHERE new_upc_count != old_upc_count
